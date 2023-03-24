@@ -31,6 +31,12 @@ int main() {
     for (iter=inventory.begin(); iter!=inventory.end(); ++iter){
         cout << *iter << endl;
     }
+    cout << "\nYour armor is destroyed in a fierce batlle. \n";
+    inventory.erase((inventory.begin() + 2));
+    cout << "\nYour item: \n";
+    for (iter=inventory.begin(); iter!=inventory.end(); ++iter){
+        cout << *iter << endl;
+    }
 
     return 0;
 
