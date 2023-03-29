@@ -2,7 +2,7 @@
 
 using namespace std;
 
-int radiation(int health);
+inline int radiation(int health);
 
 int main(){
     int health = 80;
