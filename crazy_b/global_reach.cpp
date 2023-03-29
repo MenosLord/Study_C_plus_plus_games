@@ -28,6 +28,6 @@ void hide_global(){
 }
 
 void change_global(){
-    int glob = -10; //изменяем глобальную переменную glob
+    glob = -10; //изменяем глобальную переменную glob
     cout << "In change_global glob is: " << glob << "\n\n";
 }
