@@ -113,5 +113,11 @@ char humanPiece(){
     }
 }
 
-
+char opponent(char piece){
+    if (piece == X){
+        return 0;
+    } else {
+        return X;
+    }
+}
 
