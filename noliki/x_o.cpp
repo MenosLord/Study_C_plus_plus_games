@@ -24,15 +24,15 @@ using namespace std;
 // прототипы функций
 void instructions(); // отображает правила игры
 char askYesorNot(string question); // задает вопрос ожидая ответ "Да" или "Нет"
-int askNumber(string question, int high, int low =0); // запрашивает число из диапазонаб получает вопрос, малое число или большее
-                                                      // возвращает число в диапозоне от low до high
+int askNumber(string question, int high, int low = 0); // запрашивает число из диапазона получает вопрос, малое число или больше 
+                                                      //возвращает число в диапозоне от low до high
 char humanPiece(); //определяет какими фигурами будет ходить пользователь. Возвращает X или O
 char opponent(char piece); // ответ компа на ход человека
 void displayBoard(const vector<char>& board); // отрисовка поля, получает поле
 char winner(const vector<char>& board); // определяет победителя игры. Возвращает либо Х, либо О, либо T(ничья), либо N(еще не определено)
-bool isLegal(const vector<char>&board, int move); // проверка на корректность хода
+bool isLegal(int move,const vector<char>&board); // проверка на корректность хода
 int humanMove(const vector<char>&board, char human); // узнает ход пользователя
-int computerMove(vector<char>&board, char computer); // узнает ход компа
+int computerMove(vector<char> board, char computer); // узнает ход компа
 void announceWinner(char winner, char computer, char human); // оглашение результа. Победа компа, либо человека, либо ничья
 
 
@@ -64,7 +64,7 @@ int main() {
         displayBoard(board);
         turn = opponent(turn);
     }
-    announceWinner(winnner(board), computer, human);
+    announceWinner(winner(board), computer, human);
     return 0;
 }
 
@@ -93,7 +93,7 @@ char askYesorNot(string question){
     return response;
 }
 
-int askNumber(string question, int high, int low =0){
+int askNumber(string question, int high, int low){
     int number;
     do {
         cout << question << " (" << low << " - " << high << "): ";
@@ -160,6 +160,89 @@ char winner(const vector<char>& board){
     return NO_ONE;
 }
 
-bool isLegal(const vector<char>&board, int move){
+inline bool isLegal(int move, const vector<char>&board){
     return (board[move] == EMPTY);
+}
+
+int humanMove(const vector<char>&board, char human){
+    int move = askNumber("Where will you move?", (board.size() - 1));
+    while (!isLegal(move, board)){
+        cout << "\nThat square is already occupied, foolish human. \n";
+        move = askNumber("Where will you move?", (board.size() - 1));
+    }
+    cout << "Fine...\n";
+
+    return move;
+}
+
+int computerMove(vector<char> board, char computer){
+    unsigned int move = 0;
+    bool found = false;
+    // если комп может выиграть следующим ходом он делает этот ход
+    while (!found && move < board.size()){
+        if (isLegal(move, board)){
+            board[move] = computer;
+            found = winner(board) == computer;
+            board[move] = EMPTY;
+        }
+        if (!found) {
+            ++move;
+        }
+    }
+    // если человек может победить след. ходом, блокировать этот ход
+    if (!found) {
+        move = 0;
+        char human = opponent(computer);
+        while (!found && move < board.size()) {
+            if (isLegal(move, board)) {
+                board[move] = human;  
+                found = winner(board) == human;
+                board[move] = EMPTY;        
+            }
+            if (!found) {
+                ++move;
+            }
+        }
+    }
+    // или занять следующим ходом оптимальную свободную клетку
+    if (!found) {
+        move = 0;
+        unsigned int i = 0;
+
+        const int BEST_MOVES[] = {4, 0, 2, 6, 8, 1, 3, 5, 7};
+        // выбрать оптимальную свободную клетку
+        while (!found && i <  board.size()) {
+            move = BEST_MOVES[i];
+            if (isLegal(move, board)) {
+                found = true;
+            }
+            ++i;
+        }
+    }
+
+    cout << "I shall take square number " << move << endl;
+	return move;
+}
+
+void announceWinner(char winner, char computer, char human){
+    if (winner == computer)
+    {
+        cout << winner << "'s won!\n";
+        cout << "As I predicted, human, I am triumphant once more -- proof\n";
+        cout << "that computers are superior to humans in all regards.\n";
+    }
+
+	else if (winner == human)
+    {
+        cout << winner << "'s won!\n";
+        cout << "No, no!  It cannot be!  Somehow you tricked me, human.\n";
+        cout << "But never again!  I, the computer, so swear it!\n";
+    }
+
+	else
+    {
+        cout << "It's a tie.\n";
+        cout << "You were most lucky, human, and somehow managed to tie me.\n";
+        cout << "Celebrate... for this is the best you will ever achieve.\n";
+	}
 }
