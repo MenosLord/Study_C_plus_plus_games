@@ -24,7 +24,7 @@ using namespace std;
 // прототипы функций
 void instructions(); // отображает правила игры
 char askYesorNot(string question); // задает вопрос ожидая ответ "Да" или "Нет"
-int askNumbers(string question, int high, int low =0); // запрашивает число из диапазонаб получает вопрос, малое число или большее
+int askNumber(string question, int high, int low =0); // запрашивает число из диапазонаб получает вопрос, малое число или большее
                                                       // возвращает число в диапозоне от low до high
 char humanPiece(); //определяет какими фигурами будет ходить пользователь. Возвращает X или O
 char opponent(char piece); // ответ компа на ход человека
@@ -68,8 +68,50 @@ int main() {
     return 0;
 }
 
+void instructions(){
+    cout << "Welcome to the ultimate man-machine showdown: Tic-Tac-Toe.\n";
+    cout << "--where human brain is pit against silicon processor\n\n";
 
+    cout << "Make your move known by entering a number, 0 - 8.  The number\n";
+    cout << "corresponds to the desired board position, as illustrated:\n\n";
+    
+    cout << "0 | 1 | 2\n";
+    cout << "---------\n";
+    cout << "3 | 4 | 5\n";
+    cout << "---------\n";
+    cout << "6 | 7 | 8\n\n";
 
+    cout << "Prepare yourself, human.  The battle is about to begin.\n\n";
+}
+
+char askYesorNot(string question){
+    char response;
+    do {
+        cout << question << "(y/n): ";
+        cin >> response;
+    } while(response != 'y' && response != 'n');
+    return response;
+}
+
+int askNumber(string question, int high, int low =0){
+    int number;
+    do {
+        cout << question << " (" << low << " - " << high << "): ";
+        cin >> number;
+    } while(number > high || number < low);
+    return number;
+}
+
+char humanPiece(){
+    char go_first = askYesorNot("Do you require the first move?");
+    if (go_first == 'y'){
+        cout << "\nThen take the first move. You will need it. \n";
+        return X;
+    } else {
+        cout << "You bravery will be your undoing... I will go first.\n";
+        return 0;
+    }
+}
 
 
 
