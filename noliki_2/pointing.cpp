@@ -31,7 +31,7 @@ int main() {
     string str = "score";
     string* pStr = &str; // указатель на строку
     cout << "Str is: " << str << "\n";
-    cout << "*pSrt is: " << *pStr << "\n";
+    cout << "*pStr is: " << *pStr << "\n";
     cout << "(*pStr).size() is: " << (*pStr).size() << "\n";
     cout << "pStr->size() is: " << pStr->size() << "\n";
     return 0;
